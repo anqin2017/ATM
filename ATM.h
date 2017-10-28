@@ -15,5 +15,4 @@ private:
 	int account;
 	char *username;
 	int balance;
-	int data;
 };
