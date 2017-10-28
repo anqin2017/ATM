@@ -17,7 +17,7 @@ int ATM::Account_Create(int myaccout,char *myusername,int mybalance)
 int ATM::Save_Money(int myaccout, char *myusername, int mysavemoney, int mydate)
 {
 	balance = balance + mysavemoney;
-
+	date = mydate;
 	return 0;
 }
 int ATM::Draw_Money(int myaccout, char *myusername, int mydrawmoney, int mydate)
