@@ -3,12 +3,14 @@
 
 #include <QWidget>
 #include <QTreeView>
+#include <QStandardItemModel>
 
-class FileTree : public QWidget
+class FileTree : public QTreeView
 {
     Q_OBJECT
 public:
-    explicit FileTree(QWidget *parent = 0);
+    explicit FileTree(QTreeView *parent = 0);
+
 
 signals:
 

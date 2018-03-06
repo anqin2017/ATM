@@ -45,13 +45,13 @@ win32:CONFIG(debug, debug|release):{
 
 YOUR_PLATFORM{
     message("Deep Tool!!!")
-    THIRD_DIR = $$PWD/../../third_lib
+    THIRD_DIR = $$PWD/../../pvt_libs
     CONFIG += OPENCV3
 }
 
 
 OPENCV3{
-CV_DIR = $${THIRD_DIR}/opencv320/build
+CV_DIR = $${THIRD_DIR}/opencv320
 INCLUDEPATH += $${CV_DIR}/include
 LIBS += -L$${CV_DIR}/lib/ -lopencv_world320$${LIB_SUFFIX}
 }
