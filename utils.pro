@@ -45,7 +45,7 @@ win32:CONFIG(debug, debug|release):{
 
 YOUR_PLATFORM{
     message("Deep Tool!!!")
-    THIRD_DIR = $$PWD/../../pvt_libs
+    THIRD_DIR = $$PWD/../../third_lib
     CONFIG += OPENCV3
 }
 
