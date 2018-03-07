@@ -4,6 +4,14 @@ FileTree::FileTree(QWidget *parent) :
     QTreeView(parent)
 {
     model_ = new QStandardItemModel(this);
+    setSortingEnabled(true);//item sorting enable
+    //setStyleSheet("QTreeView::item {height: 25px;}");
+    //sortByColumn(3, Qt::DescendingOrder);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);//set item selection mode
+    setEditTriggers(QAbstractItemView::SelectedClicked |
+                    QAbstractItemView::EditKeyPressed);// set edit file name key
+    connect(this,SIGNAL(doubleClicked(const QModelIndex)),this,SLOT(SendItemData(const QModelIndex)));
+
     //setHorizontalHeaderLabels(QStringList()<<QStringLiteral("项目") << QStringLiteral("信息"));
     //setHeader(QHeaderView());
 //    QStandardItemModel* model = new QStandardItemModel(4,2);
@@ -35,20 +43,60 @@ FileTree::FileTree(QWidget *parent) :
 
 }
 
-int FileTree::InitHeadData(QStringList list)
+int FileTree::InitHeadData(QStringList headdata)
 {
    // qDebug() << list.size();
-    if(list.size() == 0)
+    if(headdata.size() == 0)
     {
-        cerr << "the list is empty!!!" << endl;
+        cerr << "the headdata list is empty!!!" << endl;
         return -1;
     }
-    model_ ->setColumnCount(list.size());
-    for(int i = 0; i < list.size(); ++i)
+    model_ ->setColumnCount(headdata.size());
+
+    for(int i = 0; i < headdata.size(); ++i)
     {
-        model_ ->setHeaderData(i,Qt::Horizontal,list[i]);
-        qDebug() << list[i];
+        model_ ->setHeaderData(i,Qt::Horizontal,headdata[i]);
+        qDebug() << headdata[i];
     }
     setModel(model_);
     return 0;
 }
+
+int FileTree::SetItemData(QStringList itemdata)
+{
+    if(itemdata.size() == 0)
+    {
+        cerr << "the itemdata is empty!!!" << endl;
+        return -1;
+    }
+    for(int i = 0 ; i< itemdata.size() ; ++i)
+    {
+        QStandardItem* item = new QStandardItem(itemdata[i]);
+        model_ ->setItem(i,item);
+    }
+    setModel(model_);
+}
+
+int FileTree::ShowFileNameFromDir(const QString &filedir)
+{
+    GetFileNameFromDir(filedir.toStdString(),filename);
+    QStringList list ;
+    for(int i = 0 ; i < filename.size(); ++i)
+    {
+        list << QString::fromStdString(filename[i]);
+    }
+    SetItemData(list);
+    return 0;
+}
+
+void FileTree::SendItemData(const QModelIndex& itemdata)
+{
+    if(filename.empty())
+    {
+        return;
+    }
+    qDebug() << QString::fromStdString(filename[itemdata.row()]);
+    emit SendImageName(QString::fromStdString(filename[itemdata.row()]));
+}
+
+

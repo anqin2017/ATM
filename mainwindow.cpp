@@ -7,8 +7,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     fileTree_ = ui ->treeView;
-    QStringList list = QStringList()<<QStringLiteral("Item") << QStringLiteral("Info");
+    QStringList list = QStringList()<<QStringLiteral("ImageName");
     fileTree_ ->InitHeadData(list);
+    //QStringList list1 = QStringList()<<QStringLiteral("dog") << QStringLiteral("pig");
+    //fileTree_ ->SetItemData(list1);
+    QString dir = "C:/Users/AQ/Desktop/deeplabel/JDeepLabel/images/icon";
+    fileTree_ ->ShowFileNameFromDir(dir);
+
 }
 
 MainWindow::~MainWindow()
