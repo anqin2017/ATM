@@ -45,7 +45,7 @@ win32:CONFIG(debug, debug|release):{
 
 YOUR_PLATFORM{
     message("Deep Tool!!!")
-    THIRD_DIR = $$PWD/../../third_lib
+    THIRD_DIR = $$PWD/../../pvt_libs
     CONFIG += OPENCV3
 }
 
@@ -59,10 +59,16 @@ LIBS += -L$${CV_DIR}/lib/ -lopencv_world320$${LIB_SUFFIX}
 SOURCES += main.cpp\
         mainwindow.cpp \
     third_utils/misc.cpp \
-    filetree.cpp
+    filetree.cpp \
+    imageview/drawrect.cpp \
+    imageview/paintscene.cpp \
+    imageview/ZoomGraphicsViewLite.cpp
 
 HEADERS  += mainwindow.h \
     third_utils/misc.h \
-    filetree.h
+    filetree.h \
+    imageview/drawrect.h \
+    imageview/paintscene.h \
+    imageview/ZoomGraphicsViewLite.h
 
 FORMS    += mainwindow.ui
