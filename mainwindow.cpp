@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     imageView_ = ui ->imageView;
     QStringList list = QStringList()<<"*.jpg" << "*.png" << "*.bmp";
     //fileTree_ ->InitHeadData(list);
-    QString dir = "C:/Users/pvt1001/Desktop/pvt_utils-6/pvt_utils/icon";
+    QString dir = "C:/Users/AQ/Desktop/image";
     //fileTree_ ->ShowFileNameFromDir(dir);
     connect(fileTree_,&FileTree::SendImageName,this,&MainWindow::ShowImage);
     fileTree_ ->Init(list,dir);
@@ -25,7 +25,7 @@ MainWindow::~MainWindow()
 void MainWindow::ShowImage(QString name)
 {
     //qDebug() << name;
-    QString imagePath = directoryPath_ + "/" + name;
+    QString imagePath = "C:/Users/AQ/Desktop/image/" + name;
     cv::Mat src = cv::imread(imagePath.toStdString());
     if(!src.data)
     {

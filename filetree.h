@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QString>
 #include <QFileSystemModel>
+#include <QMenu>
 #include "third_utils/misc.h"
 
 using namespace std;
@@ -27,19 +28,20 @@ public:
 
     int ShowFileNameFromDir(const QString& fileDir);
 
-
-
-
 signals:
     void SendImageName(QString name);
 
 public slots:
     void SendItemData(const QModelIndex& itemData);
 
+    void CustomContextDeal(const QPoint&);
+
 private:
     std::vector< string > filename;
     QStandardItemModel* model_;
     QFileSystemModel* fileModule_;
+    QMenu* menu_;
+    QAction* actionDelete_;
 };
 
 #endif // FILETREE_H

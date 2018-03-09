@@ -3,16 +3,19 @@
 FileTree::FileTree(QWidget *parent) :
     QTreeView(parent)
 {
-    model_ = new QStandardItemModel(this);
-    fileModule_ = new QFileSystemModel(this);
     setSortingEnabled(true);//item sorting enable
     //setStyleSheet("QTreeView::item {height: 25px;}");
     //sortByColumn(3, Qt::DescendingOrder);
     setSelectionMode(QAbstractItemView::ExtendedSelection);//set item selection mode
     setEditTriggers(QAbstractItemView::SelectedClicked |
-                    QAbstractItemView::EditKeyPressed);// set edit file name key
+                    QAbstractItemView::EditKeyPressed);
+    model_ = new QStandardItemModel(this);
+    fileModule_ = new QFileSystemModel(this);
+    menu_ = new QMenu(this);
+    actionDelete_ = new QAction("delete",this);
+    actionDelete_ ->setShortcut(QKeySequence::Delete);
     connect(this,SIGNAL(doubleClicked(const QModelIndex)),this,SLOT(SendItemData(const QModelIndex)));
-
+    connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(CustomContextDeal(QPoint)));
 }
 
 int FileTree::Init(QStringList nameFilter, const QString &rootPath)
@@ -20,7 +23,7 @@ int FileTree::Init(QStringList nameFilter, const QString &rootPath)
     QDir dir;
     if(!dir.exists(rootPath))
     {
-        cerr << "the rootpath doesn't exits " << endl;
+        cerr << "the rootpath not exits " << endl;
         return -1;
     }
     // set the file to write,delete...
@@ -84,12 +87,21 @@ int FileTree::ShowFileNameFromDir(const QString &fileDir)
 
 void FileTree::SendItemData(const QModelIndex& itemData)
 {
-    if(filename.empty())
-    {
-        return;
-    }
-    qDebug() << QString::fromStdString(filename[itemData.row()]);
-    emit SendImageName(QString::fromStdString(filename[itemData.row()]));
+//    if(filename.empty())
+//    {
+//        return;
+//    }
+//    qDebug() << QString::fromStdString(filename[itemData.row()]);
+//    emit SendImageName(QString::fromStdString(filename[itemData.row()]));
+    qDebug() << fileModule_ ->fileName(itemData);
+    emit SendImageName(fileModule_ ->fileName(itemData));
+}
+
+void FileTree::CustomContextDeal(const QPoint&)
+{
+    qDebug() << "request";
+    menu_ ->addAction(actionDelete_);
+    menu_ ->exec(QCursor::pos());
 }
 
 
