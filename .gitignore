@@ -1,0 +1,7 @@
+#Ignore submodules
+<<<<<<< HEAD
+.vs/*
+/x64/*
+*.vcxproj
+*.filters
+/build/*

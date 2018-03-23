@@ -9,12 +9,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     fileTree_ = ui ->treeView;
     imageView_ = ui ->imageView;
-    QStringList list = QStringList()<<"*.jpg" << "*.png" << "*.bmp";
     //fileTree_ ->InitHeadData(list);
-    QString dir = "C:/Users/AQ/Desktop/image";
+    //QString dir = "C:/Users/pvt1001/Desktop/image1";
     //fileTree_ ->ShowFileNameFromDir(dir);
     connect(fileTree_,&FileTree::SendImageName,this,&MainWindow::ShowImage);
-    fileTree_ ->Init(list,dir);
+
 }
 
 MainWindow::~MainWindow()
@@ -25,7 +24,7 @@ MainWindow::~MainWindow()
 void MainWindow::ShowImage(QString name)
 {
     //qDebug() << name;
-    QString imagePath = "C:/Users/AQ/Desktop/image/" + name;
+    QString imagePath = directoryPath_ + "/" + name;
     cv::Mat src = cv::imread(imagePath.toStdString());
     if(!src.data)
     {
@@ -41,7 +40,9 @@ void MainWindow::on_pushButtonDirectory_clicked()
    {
        qDebug() << directoryPath_;
        ui ->lineEditDirectoryAddress ->setText(directoryPath_);
-       fileTree_ ->ShowFileNameFromDir(directoryPath_);
+       QStringList list = QStringList()<<"*.jpg" << "*.png" << "*.bmp";
+       //fileTree_ ->ShowFileNameFromDir(directoryPath_);
+       fileTree_ ->Init(list,directoryPath_);
    }
 }
 

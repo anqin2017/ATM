@@ -26,8 +26,6 @@ public:
 
     int SetItemData(QStringList itemData);
 
-    int ShowFileNameFromDir(const QString& fileDir);
-
 signals:
     void SendImageName(QString name);
 
@@ -35,6 +33,8 @@ public slots:
     void SendItemData(const QModelIndex& itemData);
 
     void CustomContextDeal(const QPoint&);
+
+    void DeleteItemData();
 
 private:
     std::vector< string > filename;

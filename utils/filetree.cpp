@@ -9,6 +9,7 @@ FileTree::FileTree(QWidget *parent) :
     setSelectionMode(QAbstractItemView::ExtendedSelection);//set item selection mode
     setEditTriggers(QAbstractItemView::SelectedClicked |
                     QAbstractItemView::EditKeyPressed);
+    setContextMenuPolicy(Qt::CustomContextMenu);// must set for the signal customContextMenuRequested
     model_ = new QStandardItemModel(this);
     fileModule_ = new QFileSystemModel(this);
     menu_ = new QMenu(this);
@@ -16,6 +17,7 @@ FileTree::FileTree(QWidget *parent) :
     actionDelete_ ->setShortcut(QKeySequence::Delete);
     connect(this,SIGNAL(doubleClicked(const QModelIndex)),this,SLOT(SendItemData(const QModelIndex)));
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(CustomContextDeal(QPoint)));
+    connect(actionDelete_,&QAction::triggered,this,&FileTree::DeleteItemData);
 }
 
 int FileTree::Init(QStringList nameFilter, const QString &rootPath)
@@ -59,7 +61,6 @@ int FileTree::InitHeadData(QStringList headData)
 
 int FileTree::SetItemData(QStringList itemData)
 {
-    //model_ ->clear();
     if(itemData.size() == 0)
     {
         cerr << "the itemdata is empty!!!" << endl;
@@ -71,18 +72,6 @@ int FileTree::SetItemData(QStringList itemData)
         model_ ->setItem(i,item);
     }
     setModel(model_);
-}
-
-int FileTree::ShowFileNameFromDir(const QString &fileDir)
-{
-    GetFileNameFromDir(fileDir.toStdString(),filename);
-    QStringList list ;
-    for(int i = 0 ; i < filename.size(); ++i)
-    {
-        list << QString::fromStdString(filename[i]);
-    }
-    SetItemData(list);
-    return 0;
 }
 
 void FileTree::SendItemData(const QModelIndex& itemData)
@@ -102,6 +91,17 @@ void FileTree::CustomContextDeal(const QPoint&)
     qDebug() << "request";
     menu_ ->addAction(actionDelete_);
     menu_ ->exec(QCursor::pos());
+}
+
+void FileTree::DeleteItemData()
+{
+    QModelIndexList list =selectionModel()->selectedIndexes();
+
+    QList<QModelIndex>::Iterator modelIndex;
+    for (modelIndex = list.begin(); modelIndex != list.end(); ++modelIndex)
+    {
+        fileModule_->remove(*modelIndex);
+    }
 }
 
 
