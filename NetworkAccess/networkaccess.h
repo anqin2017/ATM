@@ -5,6 +5,11 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
+#include <iostream>
+#include <QMap>
+#include <QUuid>
+#include <QFile>
+
 using namespace std;
 
 class NetWorkAccess : public QObject
@@ -21,13 +26,19 @@ public:
 
     int  Get();
 
+    int  Post();
+
 
 signals:
 
 public slots:
-    void slotReadyRead();
+    void SlotReadyRead();
 
     void OnAuthenticationRequest(QNetworkReply*, QAuthenticator*);
+
+    void SlotPostReplyFinish();
+
+    int InitPostDataFrame(QMap<QString,QString> params,QString uploadfilename,QString newfilename,QString filepath);
 
 public:
     QString string_;
@@ -39,6 +50,7 @@ private:
     QNetworkRequest* request_;
     QNetworkReply* reply_;
     QUrl * url_;
+    QByteArray   postData_;
 
 };
 

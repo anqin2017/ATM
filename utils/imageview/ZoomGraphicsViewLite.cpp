@@ -5,6 +5,10 @@
 #include <QDebug>
 
 const qreal SCALE_FACTOR = 1.25;
+#define VIEW_CENTER viewport() ->rect().center()
+#define VIEW_WIDTH  viewport() ->rect().width()
+#define VIEW_HEIGHT viewport() ->rect().height()
+
 
 QImage ZoomGraphicsViewLite::cvMat2QImage(const cv::Mat& mat)
 {
@@ -53,18 +57,37 @@ QImage ZoomGraphicsViewLite::cvMat2QImage(const cv::Mat& mat)
     }
 }
 
+//void ZoomGraphicsViewLite::translateImage(QPointF point)
+//{
+//    point *= scale_;
+//    point *= translateSpeed_;
+//    // view 根据鼠标下的点作为锚点来定位 scene
+//    setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+//    QPoint newCenter(VIEW_WIDTH / 2 -point.x(), VIEW_HEIGHT/ 2 -point.y());
+//    centerOn(mapToScene(newCenter));
+//    // scene 在 view 的中心点作为锚点
+//    setTransformationAnchor(QGraphicsView::AnchorViewCenter);
+//}
+
+
 ZoomGraphicsViewLite::ZoomGraphicsViewLite(QWidget *parent) :
     QGraphicsView(parent),
     scene_(new PaintScene(this)),
     pixmapitem_(new QGraphicsPixmapItem())
+
 {
     scene_->addItem(pixmapitem_);
     setScene(scene_);
+    setDragMode (QGraphicsView::ScrollHandDrag);
 }
 
 ZoomGraphicsViewLite::~ZoomGraphicsViewLite()
 {
-
+    if(scene_ != NULL)
+    {
+        delete scene_;
+        scene_ = NULL;
+    }
 }
 
 void ZoomGraphicsViewLite::displayImage(cv::Mat image)
@@ -74,9 +97,11 @@ void ZoomGraphicsViewLite::displayImage(cv::Mat image)
 
     // set pixmap
     pixmapitem_->setPixmap(pixmap);
+    pixmapitem_ ->setFlags(QGraphicsItem::ItemIsMovable);
 
     // view fit the pixmap boundary and init the draw mode
     setSceneRect(pixmapitem_->boundingRect());
+
     fitInView(pixmapitem_, Qt::KeepAspectRatio);
 }
 
@@ -87,19 +112,19 @@ void ZoomGraphicsViewLite::wheelEvent(QWheelEvent *event)
     event->accept();
 }
 
-void ZoomGraphicsViewLite::scaleImage(const qreal factor){
+void ZoomGraphicsViewLite::scaleImage(const qreal factor)
+{
     qreal currentScale = transform().m11();
-    qreal newScale = currentScale * factor;
+    qreal autualscale = currentScale * factor;
     qreal actualFactor = factor;
 
-    if (newScale > 1000)
+    if (autualscale > 1000)
     {
         actualFactor = 1000./currentScale;
     }
-    else if (newScale < 0.001)
+    else if (autualscale < 0.001)
     {
         actualFactor = 0.001/currentScale;
     }
-
     scale(actualFactor, actualFactor);
 }

@@ -15,21 +15,20 @@ public:
     void autoRemoveRoi();
 
     // QGraphicsScene interface
-protected:
+public:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
+
 public:
-    QPointF pointStart,pointEnd;
+    bool      drawing = false;
+    QPointF   pointStart,pointEnd;
     DrawRect* rect_;
     QVector < DrawRect*> rectList_;
-
-    // QGraphicsScene interface
-protected:
-    void keyPressEvent(QKeyEvent *event);
+    Qt::MouseButton button_;
 };
 
 #endif // PAINTSCENE_H

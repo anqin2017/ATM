@@ -31,3 +31,6 @@ HEADERS  += mainwindow.h \
     networkaccess.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    source.qrc

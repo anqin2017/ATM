@@ -34,11 +34,13 @@ public:
      PaintScene *scene_; // for the view
 
 private:
-    void scaleImage(const qreal factor);
+    void  scaleImage(const qreal factor);
+
     QImage cvMat2QImage(const cv::Mat& mat);
+
     QGraphicsPixmapItem *pixmapitem_; // to display the pixmap
-private:
-    QPainter* painter_;
+
+    void translateImage(QPointF point);
 
 };
 

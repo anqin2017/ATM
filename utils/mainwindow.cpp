@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //QString dir = "C:/Users/pvt1001/Desktop/image1";
     //fileTree_ ->ShowFileNameFromDir(dir);
     connect(fileTree_,&FileTree::SendImageName,this,&MainWindow::ShowImage);
+    imageView_ ->scene_ ->drawing = true;
 
 }
 
